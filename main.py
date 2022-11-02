@@ -13,6 +13,26 @@ import turtle
 # Globals and constants
 APPLICATION_NAME = "Python Drawing App v1"
 
+def get_actions():
+    draw_list_tuple = []
+    draw_list_tuple.append(('forward', 100))
+    draw_list_tuple.append(('left', 90))
+    draw_list_tuple.append(('forward', 100))
+    draw_list_tuple.append(('left', 90))
+    draw_list_tuple.append(('forward', 100))
+    draw_list_tuple.append(('left', 45))
+    draw_list_tuple.append(('forward', 90))
+    draw_list_tuple.append(('left', 45))
+    
+    # Use this as an example for the challenge
+    direction = 'forward'
+    distance = 90
+    vector = (direction, distance)
+    draw_list_tuple.append(vector)
+
+    return draw_list_tuple
+
+
 def draw(t, direction, distance):
     if direction == 'left':
         t.left(distance)
@@ -28,24 +48,11 @@ def process_draw_list(t, draw_list):
 
 def main():
     print(APPLICATION_NAME)
-    directions = ['forward', 'left', 'forward', 'left', 'forward']
-    distances = [100, 90, 100, 90, 100]
     main_turtle = initialize_turtle()
 
-    draw_list = [
-        ['forward', 100]
-        , ['left', 90]
-        , ['forward', 100]
-        , ['left', 90]
-        , ['forward', 90]
-        , ['left', 45]
-        , ['forward', 100]
-    ]
-
-    process_draw_list(main_turtle, draw_list)
-
-    # for i in range(len(directions)):
-    #    draw(main_turtle, directions[i], distances[i])
+    # Tuple - used to store multiple items in a single variable
+    draw_list_tuple = get_actions()
+    process_draw_list(main_turtle, draw_list_tuple)
 
     turtle.Screen().exitonclick()
 
