@@ -12,32 +12,77 @@ import turtle
 
 # Globals and constants
 APPLICATION_NAME = "Python Drawing App v1"
+def print_draw_list(draw_list):
+    print("Current drawing list:")
+    for i in draw_list:
+        print(i)
+
 def get_actions_prompt():
     draw_list = []
     prompt = """
 Enter a direction from the following:
-[1] Left
-[2] Right
-[3] Forward
+[0] Left
+[1] Right
+[2] Forward
+[e] Edit an entry
+[z] Undo last entry
 [q] Quit
+Your choice: """
+
+    edit_prompt = """
+Enter a direction from the following:
+[0] Left
+[1] Right
+[2] Forward
+[c] Cancel
 Your choice: """
     keep_going = True
     while keep_going:
         response = input(prompt)
         if response == 'q':
             keep_going = False
+        elif response == 'e':
+            if len(draw_list) > 0:
+                print("Editing an item:")
+                for i in range(len(draw_list)):
+                    print(f"[{i}] {draw_list[i]}")
+                edit_item = eval(input("Enter the index of the action to edit: "))
+                edit_response = input(edit_prompt)
+                if edit_response == 'c':
+                    print("Edit canceled")
+                else:
+                    if eval(edit_response) == 0:
+                        direction = 'left'
+                    elif eval(edit_response) == 1:
+                        direction = 'right'
+                    elif eval(edit_response) == 2:
+                        direction = 'forward'
+                    else:
+                        direction = 'NA'
+                    distance = eval(input('Enter a numeric value to go: '))
+                    action = (direction, distance)
+                    draw_list[edit_item] = action
+            else:
+                print("Nothing to edit.")
+        elif response == 'z':
+            if len(draw_list) > 0:
+                last_action = draw_list.pop()
+                print(f'{last_action} removed')
+            else:
+                print("Nothing to undo.")
         else:
-            if eval(response) == 1:
+            if eval(response) == 0:
                 direction = 'left'
-            elif eval(response) == 2:
+            elif eval(response) == 1:
                 direction = 'right'
-            elif eval(response) == 3:
+            elif eval(response) == 2:
                 direction = 'forward'
             else:
                 direction = 'NA'
             distance = eval(input('Enter a numeric value to go: '))
             action = (direction, distance)
             draw_list.append(action)
+        print_draw_list(draw_list)
     return draw_list
     
 def get_actions():
