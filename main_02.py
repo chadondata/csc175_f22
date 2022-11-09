@@ -10,13 +10,14 @@ import turtle
 
 WELCOME = "Python Drawing Application"
 
-    # action_list = [
-    #     ('forward', 100)
-    #     , ('left', 90)
-    #     , ('forward', 100)
-    #     , ('left', 45)
-    #     , ('forward', 75)
-    # ]
+def print_action_list(action_list):
+    print("\nCurrent Action List:")
+    if len(action_list) == 0:
+        print("** No actions yet! **")
+    else:
+        for action in action_list:
+            print(action)
+
 
 def get_actions_prompt():
     action_list = []
@@ -25,6 +26,8 @@ Enter an action from the list below:
     [0] forward
     [1] left
     [2] right
+    [z] undo last action
+    [e] edit an action
     [q] quit
 Your choice:  """
 
@@ -33,6 +36,36 @@ Your choice:  """
         response = input(prompt)
         if response == 'q':
             keep_going = False
+        elif response == 'e':
+            if len(action_list) == 0:
+                print("Nothing to edit")
+            else:
+                for index in range(len(action_list)):
+                    print(f"[{index}] {action_list[index]}")
+                edit_response = eval(input("Enter the index of the action to edit: "))
+                edit_prompt = """
+Enter an action from the list below:
+    [0] forward
+    [1] left
+    [2] right
+Your choice:  """
+                edit_action = int(input(edit_prompt))
+                if edit_action == 0:
+                    action = 'forward'
+                elif edit_action == 1:
+                    action = 'left'
+                elif edit_action == 2:
+                    action = 'right'
+                else:
+                    action = 'NA'
+                distance = eval(input('Enter a value for the distance: '))
+                vector = (action, distance)
+                action_list[edit_response] = vector
+        elif response == 'z':
+            if len(action_list) == 0:
+                print("Nothing to undo")
+            else:
+                action_list.pop()
         else:
             response = int(response)
             if response == 0:
@@ -46,6 +79,7 @@ Your choice:  """
             distance = eval(input('Enter a value for the distance: '))
             vector = (action, distance)
             action_list.append(vector)
+        print_action_list(action_list)
     
     return action_list
 
