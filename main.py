@@ -1,139 +1,138 @@
-# Python Drawing App
-# This program loads drawing instructions
-#  from a text file and processes them by
-#  drawing on the screen using turtle
+# Python drawing application
+# Takes a filename from the command line, reads the file
+#  and processes the file contents by executing the
+#  commands listed in the file.
+# The commands will be instructions on what to do draw
+#  on the screen
 
-# Sprint - weekly development objective
-# 
-
-# Get a basic program written that draws lines using
-# turtle
+# Sprint - Weekly objectives for fixes and new features
 import turtle
 
-# Globals and constants
-APPLICATION_NAME = "Python Drawing App v1"
-def print_draw_list(draw_list):
-    print("Current drawing list:")
-    for i in draw_list:
-        print(i)
+WELCOME = "Python Drawing Application"
+
+def print_action_list(action_list):
+    print("\nCurrent Action List:")
+    if len(action_list) == 0:
+        print("** No actions yet! **")
+    else:
+        for action in action_list:
+            print(action)
+
+def edit_action(action_list):
+    if len(action_list) == 0:
+        print("Nothing to edit")
+    else:
+        for index in range(len(action_list)):
+            print(f"[{index}] {action_list[index]}")
+        edit_response = eval(input("Enter the index of the action to edit: "))
+        edit_prompt = """
+Enter an action from the list below:
+    [0] forward
+    [1] left
+    [2] right
+Your choice:  """
+        edit_action = int(input(edit_prompt))
+        if edit_action == 0:
+            action = 'forward'
+        elif edit_action == 1:
+            action = 'left'
+        elif edit_action == 2:
+            action = 'right'
+        else:
+            action = 'NA'
+        distance = eval(input('Enter a value for the distance: '))
+        vector = (action, distance)
+        action_list[edit_response] = vector
+    return action_list
+
 
 def get_actions_prompt():
-    draw_list = []
+    action_list = []
     prompt = """
-Enter a direction from the following:
-[0] Left
-[1] Right
-[2] Forward
-[e] Edit an entry
-[z] Undo last entry
-[q] Quit
-Your choice: """
+Enter an action from the list below:
+    [0] forward
+    [1] left
+    [2] right
+    [z] undo last action
+    [e] edit an action
+    [q] quit
+Your choice:  """
 
-    edit_prompt = """
-Enter a direction from the following:
-[0] Left
-[1] Right
-[2] Forward
-[c] Cancel
-Your choice: """
     keep_going = True
     while keep_going:
         response = input(prompt)
         if response == 'q':
             keep_going = False
         elif response == 'e':
-            if len(draw_list) > 0:
-                print("Editing an item:")
-                for i in range(len(draw_list)):
-                    print(f"[{i}] {draw_list[i]}")
-                edit_item = eval(input("Enter the index of the action to edit: "))
-                edit_response = input(edit_prompt)
-                if edit_response == 'c':
-                    print("Edit canceled")
-                else:
-                    if eval(edit_response) == 0:
-                        direction = 'left'
-                    elif eval(edit_response) == 1:
-                        direction = 'right'
-                    elif eval(edit_response) == 2:
-                        direction = 'forward'
-                    else:
-                        direction = 'NA'
-                    distance = eval(input('Enter a numeric value to go: '))
-                    action = (direction, distance)
-                    draw_list[edit_item] = action
+            if len(action_list) == 0:
+                print("Nothing to edit")
             else:
-                print("Nothing to edit.")
+                action_list = edit_action(action_list)
         elif response == 'z':
-            if len(draw_list) > 0:
-                last_action = draw_list.pop()
-                print(f'{last_action} removed')
+            if len(action_list) == 0:
+                print("Nothing to undo")
             else:
-                print("Nothing to undo.")
+                action_list.pop()
         else:
-            if eval(response) == 0:
-                direction = 'left'
-            elif eval(response) == 1:
-                direction = 'right'
-            elif eval(response) == 2:
-                direction = 'forward'
+            response = int(response)
+            if response == 0:
+                action = 'forward'
+            elif response == 1:
+                action = 'left'
+            elif response == 2:
+                action = 'right'
             else:
-                direction = 'NA'
-            distance = eval(input('Enter a numeric value to go: '))
-            action = (direction, distance)
-            draw_list.append(action)
-        print_draw_list(draw_list)
-    return draw_list
+                action = 'NA'
+            distance = eval(input('Enter a value for the distance: '))
+            vector = (action, distance)
+            action_list.append(vector)
+        print_action_list(action_list)
     
+    return action_list
+
 def get_actions():
-    draw_list_tuple = []
-    draw_list_tuple.append(('forward', 100))
-    draw_list_tuple.append(('left', 90))
-    draw_list_tuple.append(('forward', 100))
-    draw_list_tuple.append(('left', 90))
-    draw_list_tuple.append(('forward', 100))
-    draw_list_tuple.append(('left', 45))
-    draw_list_tuple.append(('forward', 90))
-    draw_list_tuple.append(('left', 45))
+    action_list = []
+    action_list.append(('forward', 100))
+    action_list.append(('left', 90))
+    action_list.append(('forward', 100))
+    action_list.append(('left', 45))
     
-    # Use this as an example for the challenge
-    direction = 'forward'
-    distance = 90
-    vector = (direction, distance)
-    draw_list_tuple.append(vector)
+    # The following code is a good start for this week's programming challenge
+    action = 'forward'
+    distance = 75
+    vector = (action, distance)
+    action_list.append(vector)
 
-    return draw_list_tuple
-
+    return action_list
 
 def draw(t, direction, distance):
     if direction == 'left':
         t.left(distance)
-    elif direction == 'forward':
-        t.forward(distance)
     elif direction == 'right':
         t.right(distance)
+    elif direction == 'forward':
+        t.forward(distance)
     else:
-        print(direction, 'not implemented')
-        return
+        print(f'{direction} not implemented.')
 
 def initialize_turtle():
     return turtle.Turtle()
 
-def process_draw_list(t, draw_list):
-    for i in range(len(draw_list)):
-        draw(t, draw_list[i][0], draw_list[i][1])
+def process_draw_steps(t, draw_steps):
+    for i in range(len(draw_steps)):
+        draw(t, draw_steps[i][0], draw_steps[i][1])
 
 def main():
-    print(APPLICATION_NAME)
+    print(WELCOME)
     main_turtle = initialize_turtle()
 
-    # Tuple - used to store multiple items in a single variable
-    # nicedraw_list_tuple = get_actions()
-    draw_list_tuple = get_actions_prompt()
-    process_draw_list(main_turtle, draw_list_tuple)
+    # Tuple - Multiple values stored in one variable
+    # draw_steps_tuples = get_actions()
+    draw_steps_tuples = get_actions_prompt()
 
+    process_draw_steps(main_turtle, draw_steps_tuples)
+    
     turtle.Screen().exitonclick()
 
 if __name__ == '__main__':
     main()
-
