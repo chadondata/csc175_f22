@@ -8,6 +8,12 @@ def get_filename():
     file_name = input('Enter a file name: ')
     return file_name
 
+def get_sorted_letters(current_letters):
+    sorted_letters = {}
+    for letter in sorted(current_letters.keys()):
+        sorted_letters[letter] = current_letters[letter]
+    return sorted_letters
+
 def main():
     with open(get_filename(), encoding='utf8') as the_file:
         this_line = the_file.readline() # Priming read
@@ -27,9 +33,10 @@ def main():
     for letter in letters.keys():
         print(f'{letter} : {letters[letter]}')
 
+    sorted_letters = get_sorted_letters(letters)
     print("Alphabetic:")
-    for letter in sorted(letters.keys()):
-        print(f'{letter} : {letters[letter]}')
+    for letter in sorted_letters.keys():
+        print(f'{letter} : {sorted_letters[letter]}')
 
     print("Percentages:")
     total_letters = 0
@@ -39,7 +46,7 @@ def main():
 
     distributions = {}
     print("Percentages:")
-    for letter in sorted(letters.keys()):
+    for letter in sorted_letters.keys():
         print(f'{letter} : {round((letters[letter] * 100) / total_letters)}')
         distributions[letter] = round((letters[letter] * 100) / total_letters)
 
